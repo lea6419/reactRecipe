@@ -1,40 +1,39 @@
-import React from 'react';
-import LoginModal from "./components/bb/LoginModal";
-import { UserProvider } from "./components/bb/UserProvider";
-import UserUpdateForm from "./components/bb/UserUpdateForm";
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Register from "./components/bb/registeri";
-import Header from "./components/bb/header";
-import Home from "./components/bb/home";
-import About from "./components/bb/about";
-import UserAvatar from "./components/bb/UserAvatar";
-import Box from '@mui/material/Box'; // ייבוא Box
 
+import {  CssBaseline, GlobalStyles, ThemeProvider } from "@mui/material";
+import { BrowserRouter } from "react-router-dom";
+import { UserProvider } from "./provider&context/UserProvider";
+import AppRoutes from "./AppRoute";
+import AppLayout from "./component/layot/AppLayot";
+import UserControls from "./component/user/UserControllers";
+import theme from "./theme";
 function App() {
+
   return (
+    <>
+    <ThemeProvider theme={theme}>
+    <CssBaseline />
+    <GlobalStyles
+  styles={{
+    body: {
+      // backgroundImage: "url('/images/1.png')",
+      backdropColor: "rgba(0, 0, 0, 0.5)",  
+      backgroundRepeat: "no-repeat",
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundAttachment: "fixed",
+    },
+  }}
+/>
     <BrowserRouter>
       <UserProvider>
-        <div style={{ display: 'flex', justifyContent: 'space-between', padding: 20 }}>
-          <div style={{ position: 'absolute', top: 20, left: 20 }}>
-            <UserAvatar /> {/* הכנס את ה-UserAvatar כאן */}
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', position: 'absolute', top: 20, left: 100 }}> {/* שינוי המיקום */}
-            <Box sx={{ display: 'flex', gap: 1 }}> {/* הוספת Box עם gap */}
-              <Register />
-              <LoginModal />
-            </Box>
-            <UserUpdateForm />
-          </div>
-          <div style={{ position: 'absolute', top: 20, right: 20 }}>
-            <Header />
-          </div>
-        </div>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-        </Routes>
+        <AppLayout >
+        <UserControls/>
+        </AppLayout>
+        <AppRoutes/>
       </UserProvider>
     </BrowserRouter>
+    </ThemeProvider>
+    </>
   );
 }
 

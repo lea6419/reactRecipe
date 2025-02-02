@@ -1,18 +1,16 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as Yup from 'yup';
-import { TextField, Button, Typography, Container, Box, Modal } from '@mui/material';
+import { TextField, Button, Typography, Box, Modal } from '@mui/material';
 import { useContext, useState } from 'react';
 import axios from 'axios';
 import { UserContext } from '../../provider&context/UserProvider';
 import { Recipe } from '../../mpdels/models';
 import recipeStore from '../../store/RecipeStors';
-
 const AddRecipe = () => {
   const { state } = useContext(UserContext);
   const [ingredients, setIngredients] = useState(['']); // מצב לרשימת המוצרים
   const [isOpen, setIsOpen] = useState(true);
-
   const validateRecipe = Yup.object().shape({
     title: Yup.string().required("שם המתכון הוא שדה חובה"),
     description: Yup.string().required("תיאור המתכון הוא שדה חובה"),
@@ -23,11 +21,9 @@ const AddRecipe = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<Recipe>({
     resolver: yupResolver(validateRecipe)
   });
-
   const onSubmit: SubmitHandler<Recipe> = async (data) => {
     data.authorId = state.user?.id;
     data.ingredients = ingredients; // הוספת המוצרים לנתונים
-
     try {
       recipeStore.recipes.push(data);
       const res = await axios.post('http://localhost:8787/api/recipes/', data, {
@@ -39,21 +35,17 @@ const AddRecipe = () => {
     }
     setIsOpen(false);
   };
-
   const handleAddIngredient = () => {
     setIngredients([...ingredients, '']); // הוספת שדה חדש
   };
-
   const handleIngredientChange = (index: number, value: string) => {
     const newIngredients = [...ingredients];
     newIngredients[index] = value; // עדכון ערך המוצר
     setIngredients(newIngredients);
   };
-
   if (!state.user) {
     return <Typography variant="h6" color="error">עליך להתחבר כדי להוסיף מתכון.</Typography>;
   }
-
   return (
     <>
       <Modal open={isOpen} onClose={() => setIsOpen(false)}>
@@ -104,7 +96,6 @@ const AddRecipe = () => {
     </>
   );
 };
-
 const modalStyle = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -115,5 +106,4 @@ const modalStyle = {
   boxShadow: 24,
   p: 4,
 };
-
 export default AddRecipe;

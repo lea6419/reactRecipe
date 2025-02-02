@@ -38,7 +38,7 @@ const LoginModal = () => {
         }
     };
 
-    const handleSnackbarClose = (event?: React.SyntheticEvent, reason?: string) => {
+    const handleSnackbarClose = (_event?: React.SyntheticEvent, reason?: string) => {
         if (reason === 'clickaway') {
             return;
         }
@@ -80,7 +80,7 @@ const LoginModal = () => {
             </Modal>
 
             {/* Snackbar for error messages */}
-            <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose} >
+            <Snackbar open={snackbarOpen} autoHideDuration={6000}  >
                 <Alert onClose={handleSnackbarClose} severity="error" sx={{ width: '100%' }}>
                     {error}
                 </Alert>

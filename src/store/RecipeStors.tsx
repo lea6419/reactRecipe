@@ -1,8 +1,6 @@
 import { makeAutoObservable } from "mobx";
-
 import axios from "axios";
 import { Recipe } from "../mpdels/models";
-
 class RecipeStore {
     recipes: Recipe[] = [];
 

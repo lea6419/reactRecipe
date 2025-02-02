@@ -37,7 +37,7 @@ const Header = () => {
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)", // הוספת צל
         },
     }} 
-                         component={Link} to="/">Home🏠</Button>
+                         component={Link} to="/">Home</Button>
                     {state.user && ( // בדוק אם המשתמש מחובר
                         <Button variant="contained"      sx={{
                             backgroundColor: "#050505", // צבע הרקע של הכפתור
@@ -55,7 +55,7 @@ const Header = () => {
     component={Link} 
     to="/addRecipe"
 >
-    add recipes➕🍈
+    add recipes
 </Button>
                     )}
                    <Button variant="contained"      sx={{
@@ -70,7 +70,7 @@ const Header = () => {
             // color: "#FFFFFF", // שינוי צבע טקסט בהעברה
             boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.3)", // הוספת צל
         },
-    }}  component={Link} to="/recipes">recipes🍲</Button>
+    }}  component={Link} to="/recipes">recipes</Button>
                 </Box>
             </Toolbar>
         </AppBar>

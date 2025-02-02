@@ -31,7 +31,7 @@ const Home = () => {
             if (i >= images.length) {
               i = 0;
             }
-          }, 30);
+          }, 5000);
         `}
       </script>
       {/* <video width="320" height="240" controls style={{ display: 'block', margin: '25 auto' }}>

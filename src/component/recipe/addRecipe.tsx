@@ -3,44 +3,43 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import * as Yup from 'yup';
 import { TextField, Button, Typography, Box, Modal } from '@mui/material';
 import { useContext, useState } from 'react';
-import axios from 'axios';
 import { UserContext } from '../../provider&context/UserProvider';
 import { Recipe } from '../../mpdels/models';
 import recipeStore from '../../store/RecipeStors';
 const AddRecipe = () => {
   const { state } = useContext(UserContext);
-  const [ingredients, setIngredients] = useState(['']); // מצב לרשימת המוצרים
+  const [ingredients, setIngredients] = useState(['']);
   const [isOpen, setIsOpen] = useState(true);
+  const [error, setError] = useState('');
   const validateRecipe = Yup.object().shape({
     title: Yup.string().required("שם המתכון הוא שדה חובה"),
     description: Yup.string().required("תיאור המתכון הוא שדה חובה"),
-    authorId: Yup.number().required("משתמש הוא שדה חובה"),
-    ingredients: Yup.array().of(Yup.string().required("שדה מוצר הוא שדה חובה")).min(2, "יש להוסיף לפחות שתי מוצריםד")
+    ingredients: Yup.array().of(Yup.string().required("שדה מוצר הוא שדה חובה"))
+      .min(2, "יש להוסיף לפחות שתי מוצרים")
   });
-
   const { register, handleSubmit, formState: { errors } } = useForm<Recipe>({
     resolver: yupResolver(validateRecipe)
   });
   const onSubmit: SubmitHandler<Recipe> = async (data) => {
-    data.authorId = state.user?.id;
-    data.ingredients = ingredients; // הוספת המוצרים לנתונים
+    data.authorId = state.user?.id; // קבלת authorId מה-state
+    data.ingredients = ingredients;
+    console.log(data);
+
     try {
-      recipeStore.recipes.push(data);
-      const res = await axios.post('http://localhost:8787/api/recipes/', data, {
-        headers: { 'user-id': state.user?.id }
-      });
-      console.log(res);
+      console.log(state.user?.id);
+      await recipeStore.addRecipe(data);
+      setIsOpen(false);
     } catch (e) {
-      console.log(e);
+      console.error(e);
+      setError('שגיאה בשרת');
     }
-    setIsOpen(false);
   };
   const handleAddIngredient = () => {
-    setIngredients([...ingredients, '']); // הוספת שדה חדש
+    setIngredients([...ingredients, '']);
   };
   const handleIngredientChange = (index: number, value: string) => {
     const newIngredients = [...ingredients];
-    newIngredients[index] = value; // עדכון ערך המוצר
+    newIngredients[index] = value;
     setIngredients(newIngredients);
   };
   if (!state.user) {
@@ -49,7 +48,7 @@ const AddRecipe = () => {
   return (
     <>
       <Modal open={isOpen} onClose={() => setIsOpen(false)}>
-        <Box sx={{ ...modalStyle }}>
+        <Box sx={modalStyle}>
           <Typography variant="h4" gutterBottom>הוסף מתכון</Typography>
           <form onSubmit={handleSubmit(onSubmit)}>
             <TextField
@@ -69,12 +68,12 @@ const AddRecipe = () => {
               helperText={errors.description?.message}
               margin="normal" />
             <TextField
-              {...register('authorId')}
-              label="משתמש"
+              {...register('description')}
+              label="אופן ההכנה "
               variant="outlined"
               fullWidth
-              error={!!errors.authorId}
-              helperText={errors.authorId?.message}
+              error={!!errors.description}
+              helperText={errors.description?.message}
               margin="normal" />
             {ingredients.map((ingredient, index) => (
               <TextField
@@ -93,6 +92,7 @@ const AddRecipe = () => {
           </form>
         </Box>
       </Modal>
+      <Typography variant="h6" color="error">{error}</Typography>
     </>
   );
 };

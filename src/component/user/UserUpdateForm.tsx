@@ -1,10 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Modal, TextField, Button, Box, Typography } from "@mui/material";
-
 import axios from "axios";
 import { UserContext } from "../../provider&context/UserProvider";
-
-
 const UserUpdateForm: React.FC = () => {
   const { state, dispatch } = useContext(UserContext);
   const [isOpen, setIsOpen] = useState(false);
@@ -17,7 +14,6 @@ const UserUpdateForm: React.FC = () => {
             headers: {  
                 'user-id': state.user?.id // ודא שה-id נשלח כאן
             }
-           
         });
         console.log(res);
         console.log(userDetails);
@@ -27,8 +23,6 @@ const UserUpdateForm: React.FC = () => {
     }
     setIsOpen(false);
 };
-
-
   const handleOpen = () => {
     setUserDetails(state.user || {}); // עדכן את המידע כאשר פותחים את המודאל
     setIsOpen(true);
@@ -88,7 +82,6 @@ const UserUpdateForm: React.FC = () => {
     </>
   );
 };
-
 const modalStyle = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -99,5 +92,4 @@ const modalStyle = {
   boxShadow: 24,
   p: 4,
 };
-
 export default UserUpdateForm;

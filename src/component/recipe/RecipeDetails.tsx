@@ -1,35 +1,42 @@
 import { useParams } from "react-router-dom";
 import { observer } from "mobx-react-lite";
-import { Box, Typography, Button, CircularProgress } from "@mui/material";
+import { Box, Typography, CircularProgress } from "@mui/material";
 import recipeStore from "../../store/RecipeStors";
 import { Recipe } from "../../mpdels/models";
 import { useEffect, useState } from "react";
+import { color } from "framer-motion";
 
 const RecipeDetail = observer(() => {
     const { id } = useParams();
     const [loading, setLoading] = useState(true); // מצב טעינה
     const [recipe, setRecipe] = useState<Recipe | undefined>(undefined); // מצב מתכון
+    
 
     useEffect(() => {
         const fetchRecipe = () => {
+            recipeStore.getRecipes();
             const foundRecipe = recipeStore.recipes.find((r: Recipe) => r.id === parseInt(id || "0"));
+            console.log(foundRecipe);
             setRecipe(foundRecipe);
-            setLoading(false); // סיום מצב הטעינה
+            setLoading(false);
         };
-
         fetchRecipe();
     }, [id]);
+    useEffect(() => {
+        recipeStore.getRecipes();
+      }, []);
 
     if (loading) {
-        return (
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                <CircularProgress />
-            </Box>
-        );
+
     }
 
     if (!recipe) {
-        return <Typography sx={{ color: "red" }}>מתכון לא נמצא</Typography>;
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <CircularProgress sx={{ color: "#FFD700" }} />
+            </Box>
+        );
+        // return <Typography sx={{ color: "red" }}>מתכון לא נמצא</Typography>;
     }
 
     return (
@@ -58,7 +65,7 @@ const RecipeDetail = observer(() => {
             }}>
                 {recipe.title}
             </Typography>
-            
+
             <Typography variant="body1" sx={{
                 color: "#B8A28F", // טקסט בצבע שמנת
                 marginBottom: 1,
@@ -70,13 +77,18 @@ const RecipeDetail = observer(() => {
                 color: "#B8A28F", // צבע שמנת
                 marginBottom: 2,
             }}>
-            חומרים:<br />
-            {recipe.ingredients?.map(ingredient => (
+                חומרים:<br />
+                {/* {recipe.ingredients?.map((ingredient) => (
                 <Typography  variant="body1" sx={{ color: "#B8A28F", display: 'block' }}>
                     - {ingredient}
                 </Typography>
-            ))}
+            ))} */}
             </Typography>
+            {recipe.ingredients?.map((ingredient, index) => (
+                <Typography key={index} variant="body1" sx={{ color: "#B8A28F", display: 'block' }}>
+                    - {ingredient}
+                </Typography>
+            ))}
 
             <Typography variant="h6" sx={{ color: "#FFD700", marginBottom: 1 }}>
                 הוראות

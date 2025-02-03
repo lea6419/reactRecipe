@@ -4,7 +4,7 @@ import About from './component/about';
 import Home from './component/home';
 import RecipeDetail from './component/recipe/RecipeDetails';
 import AddRecipe from './component/recipe/addRecipe';
-import RecipeList from './component/recipe/recpeis';
+import RecipeList from './component/recipe/RecipeList';
 const AppRoutes = () => {
     return (
         <Routes>

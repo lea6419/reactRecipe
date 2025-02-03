@@ -24,7 +24,7 @@ const RecipeList = observer(() => {
                 }}>רשימת מתכונים</Typography>
                 <List>
                     {recipeStore.recipes.map((recipe) => (
-                        <ListItem key={recipe.id} sx={{
+                        < ListItem key={`${recipe.id}`} sx={{
                             marginBottom: 1,
                             padding: 1,
                             backgroundColor: "#333",
@@ -51,6 +51,7 @@ const RecipeList = observer(() => {
             {/* כאן יוצגו פרטי המתכון */}
             <Box sx={{ flexGrow: 1, paddingLeft: 2 }}>
                 <Outlet />
+                 {/* <RecipeList/> */}
             </Box>
         </Box>
     );

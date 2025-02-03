@@ -1,12 +1,14 @@
 import { makeAutoObservable } from "mobx";
 import axios from "axios";
 import { Recipe } from "../mpdels/models";
+
 class RecipeStore {
     recipes: Recipe[] = [];
 
     constructor() {
         makeAutoObservable(this);
-         this.getRecipes(); // קריאה לפונקציה בעת יצירת ה-Store
+         this.getRecipes(); 
+
     }
 
     // פונקציה לקבלת המתכונים
@@ -20,6 +22,16 @@ class RecipeStore {
             console.log(e);
         }
     };
+    addRecipe = async (recipe: Recipe) => {
+            try {
+                await axios.post('http://localhost:8787/api/recipes/', recipe, {
+                  headers: { 'user-id': recipe.authorId?.toString() }
+                });
+            this.recipes.push(recipe);
+        } catch (e) {
+            console.log(e);
+        }
+    }
         // פונקציה שמעדכנת את המתכונים
     setRecipes = (recipes: Recipe[]) => {
         this.recipes = recipes;
